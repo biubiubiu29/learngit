@@ -43,7 +43,7 @@ $ git commit -m "wrote a readme file"
 
 ##退回之前版本
 
-我们要把当前版本回退到上一个版本，就可以使用git reset命令:
+我们要把当前版本回退到上一个版本，就可以使用`git reset`命令:
 
 ``` 
 $ git reset --hard HEAD^
@@ -73,4 +73,41 @@ e475afc HEAD@{3}: commit: add distributed
 eaadf4e HEAD@{4}: commit (initial): wrote a readme file
 
 ```
+
+`git diff HEAD -- readme.txt`命令可以查看工作区和版本库里面最新版本的区别
+
+`git checkout -- readme.txt`意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
+
+* readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+
+* readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+总之，就是让这个文件回到最近一次git commit或git add时的状态
+
+##删除/恢复文件
+通常直接在文件管理器中把没用的文件删了，或者用rm命令删了：
+
+`$ rm test.txt`
+
+这是在工作区进行的操作，此时工作区和版本库就不一致了，接下来有两种情况：
+
+* 确实要从版本库中删除该文件，那就用命令`git rm`删掉，并且`git commit`：
+
+```
+$ git rm test.txt
+rm 'test.txt'
+```
+
+```
+$ git commit -m "remove test.txt"
+[master d46f35e] remove test.txt
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 test.txt
+```
+* 删错了，但版本库里还有，所以可以把误删的文件恢复到最新版本:
+
+```
+$ git checkout -- test.txt
+```
+`git checkout`其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。
 
